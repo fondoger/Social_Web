@@ -1,0 +1,103 @@
+
+.StatusItem {
+    box-shadow: 0 0 2px rgba(0,0,0,0.2);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.StatusItem-wrapper {
+    padding: 20px 20px 0;
+}
+
+.StatusItem-leftColumn {
+    padding-right: 12px;
+}
+
+.StatusItem-rightColumn {
+    flex: 1;
+}
+
+.StatusItem-header {
+    display: flex;
+}
+
+.StatusItem-userInfo {
+    flex: 1;
+    font-size: 14px;
+    color: #808080;
+}
+
+.StatusItem-userInfo .wrapper {
+    margin: 2px 0 2px;
+}
+
+.StatusItem-userInfo .username {
+    font-weight: 700;
+    color: #333;
+}
+
+.StatusItem-userInfo .username:hover {
+    color: #eb7350;
+}
+
+.StatusItem-userInfo .timestamp {
+    font-size: 12px;
+}
+
+.StatusItem-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.StatusItem-content {
+    padding: 12px 0;
+    line-height: 23px;
+    font-size: 14px;
+}
+
+.StatusItem-footer {
+    display: flex;
+}
+
+.StatusItem-footerItem {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    margin-left: -1px;
+    border-top: 1px solid #f2f2f5;
+}
+
+.StatusItem-footerItem .iconfont,
+.StatusItem-footerItem span {
+    color: #808080;
+}
+
+.StatusItem-footerItem:hover {
+    color: #3b7350;
+}
+
+.StatusItem-footerItem .wrapper {
+    flex: 1;
+    margin: 7px 0;
+    border-left: 1px solid #d9d9d9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.StatusItem-footerItem .iconfont {
+    font-size: 18px;
+}
+
+.StatusItem-footerItem span {
+    font-size: 12px;
+    line-height: 21px;
+}
+
+.StatusItem .StatusComments {
+    border-top: 1px solid #f2f2f5;
+    padding: 0 24px;
+}
+
+

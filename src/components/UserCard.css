@@ -1,0 +1,64 @@
+
+
+.UserCard-cover {
+    position: relative;
+    height: 90px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+    background-image: url(//img.t.sinajs.cn/t5/skin/public/covervip/2006_s.jpg?version=d06b11aa96218eb9);
+}
+
+.UserCard-avatar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    bottom: -20px;
+    padding: 3px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    width: 66px;
+    height: 66px;
+}
+
+.UserCard-info {
+    padding: 20px 0 0px;
+}
+
+.UserCard-info a {
+	color: #333;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.UserCard-info a:hover {
+	color: #eb7350;
+}
+
+.UserCard-nav {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.UserCard-navItem {
+	flex-direction: column;
+	margin: 4px 16px 12px;
+}
+
+.UserCard-navItem strong {
+	font-size: 18px;
+	font-weight: bold;
+}
+.UserCard-navItem span {
+    font-size: 12px;
+	color: #808080;
+}
+
+.UserCard-nav, .UserCard-navItem {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}

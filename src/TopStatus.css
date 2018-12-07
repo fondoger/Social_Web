@@ -1,0 +1,71 @@
+
+.TopStatus {
+}
+
+.TopStatus-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    width: 1000px;
+    padding: 12px 10px 12px 0;
+    margin: auto;
+	background-color: rgba(0,0,0,.12);
+}
+
+.TopStatus-mainColumn {
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    margin-right: 10px;
+    margin-bottom: 0;
+    width: 600px;
+}
+
+.TopStatus-leftColumn {
+	flex: 1;
+}
+
+.TopStatus-rightColumn {
+	flex: 1.3;
+}
+
+.TopStatus-leftColumn-row {
+	height: 34px;
+	padding-left: 13px;
+	display: flex;
+	justify-content: left;
+	align-items: center;
+	color: #ffffff;
+	text-decoration: none;
+	font-size: 14px;
+	line-height: 1em;
+}
+.TopStatus-leftColumn-row:hover,
+.TopStatus-leftColumn-row:focus {
+	color: #ffffff;
+	background-color: rgba(255,255,255,0.25);
+	cursor: pointer;
+	text-decoration: none;
+}
+.TopStatus-leftColumn-row .dot {
+	border-radius: 50%;
+	width: 6px;
+	height: 6px;
+	background-color: #fff;
+	margin: 8px;
+}
+.TopStatus-leftColumn-row .boldItem {
+	font-weight: bold;
+}
+.TopStatus-leftColumn .dividing-line {
+	
+}
+.TopStatus-leftColumn .dividing-line fieldset {
+	height: 11px;
+    margin-top: 11px;
+    border-top: 1px solid rgba(255,255,255,.2);
+	display: block;
+}
+

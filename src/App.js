@@ -1,28 +1,27 @@
 import React, { Component } from 'react';
+import 'antd/dist/antd.css';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
+import AppHeader from "./AppHeader";
+import AppFooter from "./AppFooter";
+import TopStatus from './TopStatus';
+import {
+  SalePage
+} from './pages';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+const App = () => (
+  <Router>
+    <div className="App">
+      <AppHeader />
+      <div className="App-main">
+        <Switch>
+          <Route path="/" exact component={TopStatus} />
+          <Route path="/sale/" component={SalePage} />
+        </Switch>
       </div>
-    );
-  }
-}
+    </div>
+  </Router>
+);
 
 export default App;

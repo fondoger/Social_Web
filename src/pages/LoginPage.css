@@ -1,0 +1,52 @@
+
+.SignFlowHomePage {
+    height: 100vh;
+	background: url(http://ww1.sinaimg.cn/large/0070O95Yly1fxziulcjhjj31ps0yrtpm.jpg) no-repeat;
+	background-size: cover;
+	background-position: bottom;
+	background-attachment: fixed;
+}
+
+.SignContainer {
+    width: 432px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.SignInputContainer {
+    border-bottom: 1px solid #ebebeb;
+}
+.SignInput {
+    border: none;
+    height: 48px;
+    color: #1a1a1a;
+    line-height: 24px;
+}
+.SignInput:focus {
+    box-shadow: none;
+}
+.SignInput:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px #fff inset;
+}
+.SignButton {
+    background-color: #0077e6;
+    border: none;
+    box-shadow: none;
+    height: 36px;
+    margin-top: 30px;
+}
+.SignSwitcher {
+    width: 100%;
+    background-color: #f6f6f6;
+    height: 58px;
+    border-top: 1px solid #ebebeb;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a1a1a;
+}
+.SignSwitcher a {
+    color: #175199;
+    cursor: pinter;
+}

@@ -7,8 +7,7 @@ export default class Main extends Component {
   render() {
     return (
       <div>
-        <AppHeader/>
-        <
+        <AppHeader />
       </div>
     );
   }

@@ -1,16 +1,24 @@
 .App {
   text-align: center;
-  background-color: #e5e5e5;
-  background: url(http://ww1.sinaimg.cn/large/0070O95Yly1fxx9kojjxcj31ps0yre84.jpg) no-repeat;
-  background-size: cover;
-  background-position: bottom;
-  background-attachment: fixed;
+  background-color: #f6f6f6;
   min-height: 100vh;
 }
 
 .App-main {
   display: block;
   padding-top: 52px;
+}
+
+.main-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    width: 1000px;
+    padding: 12px 0;
+    margin: auto;
 }
 
 .App-link {
@@ -36,6 +44,11 @@ body {
 
 body, button, p, pre {
     margin: 0;
+}
+
+article, aside, blockquote, body, button, code, dd, details, div, dl, dt, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, input, legend, li, menu, nav, ol, p, pre, section, td, textarea, th, ul {
+    margin: 0;
+    padding: 0;
 }
 
 a {
@@ -89,8 +102,6 @@ a:hover, a:active, a:focus {
 }
 
 
-
-
-
-
-
+.ant-dropdown-menu {
+    border: 1px solid #ebebeb;
+}

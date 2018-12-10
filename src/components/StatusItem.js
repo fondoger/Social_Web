@@ -1,38 +1,10 @@
 import React, { Component } from "react";
 import IconFont from "./IconFont";
 import UserAvatar from "./UserAvatar";
+import ImageCard from './ImageCard';
 import { Dropdown, Icon, Menu, Form, Button, Input, Comment, List, Avatar } from "antd";
 import "./StatusItem.css";
-
-const status = {
-    user: {
-        id: 3330,
-        username: "OhMyGakki",
-        self_intro: "游走在即将挂科的边缘",
-    },
-    text: "今天真的好开心啊，哈哈哈",
-    likes: 12,
-    replies: 8,
-    comments: [
-      {
-        user: {
-          id: 3331,
-          username: 'good',
-        },
-        text: '你真棒',
-        timestamp: "12月5日 23:30",
-      },
-      {
-        user: {
-          id: 3331,
-          username: 'good',
-        },
-        text: '你真棒',
-        timestamp: "12月5日 23:30",
-      },
-    ],
-    timestamp: "12月5日 23:30",
-};
+import { getGMTTimeDiff, EmojiSpan } from '../utils';
 
 export default class StatusItem extends React.Component {
   state = {
@@ -41,11 +13,12 @@ export default class StatusItem extends React.Component {
   };
   render() {
     const { showComments, commentValue } = this.state;
+    const status = this.props.status;
     return (
       <div className="Card StatusItem">
         <div className="StatusItem-wrapper">
           <div className="StatusItem-leftColumn" >
-            <UserAvatar size={50} />
+            <UserAvatar size={50} user={status.user} />
           </div>
           <div className="StatusItem-rightColumn">
             <div className="StatusItem-header">
@@ -58,6 +31,7 @@ export default class StatusItem extends React.Component {
             <StatusContent status={status} />
           </div>
         </div>
+        <StatusCard status={status} />
         { this.renderStatusFooter(status) }
         { showComments ?
           <StatusComments
@@ -74,49 +48,69 @@ export default class StatusItem extends React.Component {
 
   handleCommentOnPress = () => {
     this.setState({showComments: !this.state.showComments});
-  }
+  };
 
   renderStatusFooter(status) {
     return (
       <div className="StatusItem-footer">
-        <a className="StatusItem-footerItem">
-          <div className="wrapper">
-            <IconFont icon="#icon-shoucang" />
-            <span>收藏</span>
-          </div>
-        </a>
-        <a className="StatusItem-footerItem">
-          <div className="wrapper">
-            <IconFont icon="#icon-zhuanfa2" />
-            <span>转发</span>
-          </div>
-        </a>
-        <a
-          className="StatusItem-footerItem"
-          onClick={this.handleCommentOnPress}
-        >
-          <div className="wrapper">
-            <IconFont icon="#icon-pinglun" />
-            <span>评论</span>
-          </div>
-        </a>
-        <a className="StatusItem-footerItem">
-          <div className="wrapper">
-            <IconFont icon="#icon-dianzan2" />
-            <span>点赞</span>
-          </div>
-        </a>
+        <FooterItem icon="#icon-shoucang" title="收藏" />
+        <FooterItem icon="#icon-zhuanfa2" title="转发" />
+        <FooterItem icon="#icon-pinglun"  title="评论" onClick={this.handleCommentOnPress} />
+        <FooterItem icon="#icon-dianzan2" title="点赞" />
       </div>
     );
   }
 }
 
+const textToContentArray = (text) => {
+  const regexp = new RegExp(`(#[\\s\\S]+?#|[\n\r]|@[\\u4e00-\\u9fa5_a-zA-Z0-9\\-]+)`, 'g');
+  const contentArray = [];
+  let regArray = text.match(regexp);
+  if (!regArray)
+    regArray = [];
+  var pos = 0;
+  for (let i = 0; i < regArray.length; i++) {
+    var t = text.indexOf(regArray[i], pos);
+    if (t != pos) {
+      contentArray.push({'text': text.substring(pos, t)});
+      pos = t;
+    }
+    var t2 = pos + regArray[i].length;
+    if (text[pos]=='@') {
+      contentArray.push({'at': text.substring(pos+1, t2)})
+    } else if (text[pos]=='#') { // topic
+      contentArray.push({'topic': text.substring(pos+1, t2-1)});
+    } else if (text[pos] === '\n' || text[pos] === '\r') {
+      contentArray.push({'newline': true});
+    } else {
+      console.error("impossible");
+    }
+    pos = t2;
+  }
+  if (pos != text.length) {
+    contentArray.push({'text': text.substring(pos, text.length)});
+  }
+  return contentArray;
+}
 
-const StatusContent = ({status}) => (
-  <div className="StatusItem-content">
-    <p style={{marginBottom: 0, color: '#444'}}>{status.text}</p>
-  </div>
-);
+const StatusContent = ({status}) => {
+  const contentArray = textToContentArray(status.text);
+  return (
+    <div className="StatusItem-content">
+    { contentArray.map((content, index) => {
+        if (content.text) {
+          return <EmojiSpan text={content.text} />
+        } else if (content.at) {
+          return <a href="#" style={{color: "#0f88eb"}}>@{content.at}</a>
+        } else if (content.topic) {
+          return <a href="#" style={{color: "#0f88eb"}}>#{content.topic}#</a>
+        } else if (content.newline) {
+          return <br/>
+        }
+    })}
+    </div>
+  );
+}
 
 const UserInfo = ({status}) => {
   const user = status.user;
@@ -124,15 +118,21 @@ const UserInfo = ({status}) => {
     <div className="StatusItem-userInfo">
       <div className="wrapper">
         <a className="username">{user.username}</a>
-        <span className="self_intro"> {user.self_intro}</span>
+        <EmojiSpan style={{marginLeft: 5}} text={user.self_intro} />
       </div>
-      <span className="timestamp">{status.timestamp}</span>
+      <span className="timestamp">{getGMTTimeDiff(status.timestamp)}</span>
       <span className="timestamp"> 来自 goodbuaa.com</span>
     </div>
   );
 }
 
-
+const StatusCard = ({status}) => {
+  if (status.pics.length != 0) {
+    const images = status.pics.map(url => ({uri: url + '!mini5', bigUri: url}));
+    return (<ImageCard style={{marginTop: 12}} images={images}/>);
+  }
+  return null;
+}
 
 const CommentList = ({status}) => (
   <List
@@ -205,4 +205,13 @@ const ActionDropDown = ({status, onDelete}) => (
       <Icon type="down" size={20} style={{cursor: 'pointer'}} />
     </Dropdown>
   </div>
+);
+
+const FooterItem = ({icon, onClick, title}) => (
+  <a className="StatusItem-footerItem" onClick={onClick}>
+    <div className="wrapper">
+      <IconFont icon={icon} />
+      <span>{title}</span>
+    </div>
+  </a>
 );

@@ -1,5 +1,9 @@
 
 .TopStatus {
+	background: url(http://ww1.sinaimg.cn/large/0070O95Yly1fxx9kojjxcj31ps0yre84.jpg) no-repeat;
+	background-size: cover;
+	background-position: bottom;
+	background-attachment: fixed;
 }
 
 .TopStatus-container {
@@ -13,6 +17,7 @@
     padding: 12px 10px 12px 0;
     margin: auto;
 	background-color: rgba(0,0,0,.12);
+	min-height: 100vh;
 }
 
 .TopStatus-mainColumn {

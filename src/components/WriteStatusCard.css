@@ -1,6 +1,3 @@
-
-
-
 .WriteStatusCard {
     padding: 12px 12px 12px;
 }
@@ -21,8 +18,15 @@
     border-style: solid;
     border-width: 1px;
     box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.15) inset;
+    resize: none;
+    border-radius: 0;
+    line-height: 18px;
+    color: #808080;
 }
-
+.WriteStatusCard-input:focus {
+    box-shadow: none;
+    color: #333;
+}
 .WriteStatusCard-input textarea {
     overflow: hidden;
     min-height: 68px;
@@ -46,8 +50,61 @@
 .WriteStatusCard-footer {
     flex: 1;
     text-align: right;
+    display: flex;
 }
-
+/* 
+.WriteStatusCard-Overlay .ant-popover-inner-content {
+    border: 1px solid #444;
+} */
+.WriteStatusCard-Overlay {
+    margin-top: -20px;
+}
+.WriteStatusCard-Overlay .ant-popover-inner-content {
+    padding: 0;
+    border-radius: 6px;
+}
+.EmojiCard {
+    text-align: left;
+}
+.EmojiCard .emoji-mart-search {
+    display: none;
+}
+.EmojiCard .emoji-mart {
+    display: block;
+}
+.TopicCard {
+    padding: 16px;
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    width: 310px;
+    height: 300px;
+}
+.TopicCard-insert {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    transition: none;
+}
+.TopicCard-insert:hover {
+    background-color: #f2f2f5;
+}
+.WriteStatusCard-footerWrapper {
+    display: flex;
+    flex: 1;
+    font-size: 12px;
+    align-items: flex-end;
+    color: #555;
+}
+.WriteStatusCard-footerItem {
+    margin: 0 16px 0 0;
+    display: flex;
+    align-items: center;
+}
+.WriteStatusCard-footerItem .iconfont {
+    font-size: 21px;
+    margin-right: 4px;
+}
 .WriteStatusCard-footer .Button {
     margin-top: 5px;
     height: 30px;
@@ -59,17 +116,21 @@
     border: 1px solid #f77c3d;
     box-shadow: 0px 1px 2px rgba(0,0,0,0.25);
 }
-
-.WriteStatusCard-footer .Button:hover {
+.WriteStatusCard-footer .Button:disabled {
+    background: #ffc09f;
+    color: #fff;
+    border: 1px solid #fbbd9e;
+    box-shadow: none;
+    cursor: default;
+    opacity: 1;
+}
+.WriteStatusCard-footer .Button:focus {
+    outline: none;
+}
+.WriteStatusCard-footer .Button:hover:enabled {
     background-color: #f7671d;
     border: 1px solid #f06923;
 }
 
-.WriteStatusCard-footer .Button:disabled {
-    background-color: #ffc09f;
-    border: 1px solid #fbbd9e;
-    box-shadow: none;
-    cursor: default;
-}
 
 

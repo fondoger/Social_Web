@@ -2,18 +2,19 @@ import React, { Component } from "react";
 import IconFont from "./IconFont";
 import UserAvatar from "./UserAvatar";
 import ImageCard from './ImageCard';
-import { Dropdown, Icon, Menu, Form, Button, Input, Comment, List, Avatar } from "antd";
+import { Dropdown, Icon, Menu, Form, Button, Input, Comment, List, Avatar, message } from "antd";
 import "./StatusItem.css";
-import { getGMTTimeDiff, EmojiSpan } from '../utils';
+import { getGMTTimeDiff, EmojiSpan, API, MyStorage } from '../utils';
 
 export default class StatusItem extends React.Component {
   state = {
+    status: this.props.status,
+    replies: [],
     showComments: false,
     commentValue: "",
   };
   render() {
-    const { showComments, commentValue } = this.state;
-    const status = this.props.status;
+    const { showComments, commentValue, replies, status } = this.state;
     return (
       <div className="Card StatusItem">
         <div className="StatusItem-wrapper">
@@ -36,17 +37,40 @@ export default class StatusItem extends React.Component {
         { showComments ?
           <StatusComments
             status={status}
+            replies={replies}
             value={commentValue}
             onChange={(e)=>this.setState({commentValue: e.target.value})}
-            onSubmit={()=>alert(commentValue)}
+            onSubmit={()=> this.handleReplySubmit }
           /> : null
         }
       </div>
     );
   }
 
+  handleReplySubmit = () => {
+    const { status, replies, commentValue } = this.state;
+    API.StatusReply.create({ 
+      status_id: status.id, 
+      text: commentValue,
+    }, (responseJson) => {
+      this.setState({ replies: [...replies, responseJson ]});
+    }, (error) => {
+      message.error("回复失败 😰");
+    });
+  }
 
   handleCommentOnPress = () => {
+    const { status, replies } = this.state;
+    API.StatusReply.get({
+      status_id: status.id,
+      offset: replies.length,
+      limit: 100,
+    }, (responseJson) => {
+      var _replies = [...replies, ...responseJson];
+      this.setState({
+        replies: _replies,
+      });
+    }, (error) => { });
     this.setState({showComments: !this.state.showComments});
   };
 
@@ -134,17 +158,17 @@ const StatusCard = ({status}) => {
   return null;
 }
 
-const CommentList = ({status}) => (
+const CommentList = ({replies}) => (
   <List
     className="comment-list"
-    header={`共${status.replies}条评论` }
-    dataSource={status.comments}
+    header={`共${replies.length}条评论` }
+    dataSource={replies}
     itemLayout="horizontal"
     renderItem={item =>
       <Comment
-        avatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+        avatar={item.user.avatar + '!thumbnail'}
         author={item.user.username}
-        datetime={<span>{item.timestamp}</span>}
+        datetime={<span>{getGMTTimeDiff(item.timestamp)}</span>}
         content={<p>{item.text}</p>}
       />
     }
@@ -172,11 +196,11 @@ const Editor = ({
     </div>
 );
 
-const StatusComments = ({status, user, value, onChange, onSubmit }) => (
+const StatusComments = ({status, user, value, onChange, onSubmit, replies, }) => (
   <div className="StatusComments">
-    <CommentList status={status}/>
+    <CommentList status={status} replies={replies}/>
     <Comment
-      avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+      avatar={<Avatar src={MyStorage.user.avatar + '!thumbnail'} />}
       content={(
         <Editor
           value={value}

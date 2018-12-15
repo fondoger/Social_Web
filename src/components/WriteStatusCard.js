@@ -26,15 +26,22 @@ export default class WriteStatusCard extends Component {
           autosize={{minRows: 4, maxRows: 10}} 
           value={this.state.text}
           onChange={this.handleOnChange}
+          ref={ ref => this.textArea = ref }
         />
         <div className="WriteStatusCard-footer">
           <div className="WriteStatusCard-footerWrapper">
             <FooterItem icon="#icon-emoji" color="#ff3700" title="表情" 
-                content={<EmojiCard />} placement="bottomLeft"/>
+                placement="bottomLeft"
+                content={(
+                  <EmojiCard onEmojiSelect={this.handleEmojiSelect}/>
+                )} />
             <FooterItem icon="#icon-image" color="#75c82b" title="图片" />
-            <FooterItem icon="#icon-topic" color="#4285f4" title="话题"  
-                content={<TopicCard />} arrowPointAtCenter/>
-          </div>
+            <FooterItem icon="#icon-topic" color="#4285f4" title="话题"   
+                arrowPointAtCenter
+                content={(
+                  <TopicCard onTopicInsert={this.handleTopicInsert}/>
+                )}/>
+          </div>  
           <button 
             type="button" 
             className="Button" 
@@ -48,7 +55,17 @@ export default class WriteStatusCard extends Component {
   }
   handleOnChange = (e) => {
     const text = e.target.value;
-    this.setState({text, submitDisable: (text==="")});
+    this.setState({ text, submitDisable: (text==="") });
+  }
+  handleTopicInsert = (topicName) => {
+    const text = this.state.text + topicName + " ";
+    this.setState({ text });
+    this.textArea.focus();  
+  }
+  handleEmojiSelect = (emoji) => {
+    const text = this.state.text + emoji.native;
+    this.setState({ text });
+    this.textArea.focus();  
   }
   handleOnSubmit = () => {
     API.Status.create({
@@ -81,7 +98,7 @@ const FooterItem = ({onClick, icon, color, content,
   </Popover>
 );
 
-const EmojiCard = () => (
+const EmojiCard = ({ onEmojiSelect }) => (
   <div className="EmojiCard" >
     <Picker 
       style={{width: 320}} 
@@ -91,14 +108,17 @@ const EmojiCard = () => (
       showPreview={false}
       showSkinTones={false}
       backgroundImageFn={()=>"http://asserts.fondoger.cn/other/emoji_sheet_64.png"}
+      onSelect={ onEmojiSelect }
     />
   </div>
 );
 
-const TopicCard = ({callback}) => {
+const TopicCard = ({onTopicInsert}) => {
   return (
     <div className="TopicCard" >
-      <a href="javascript:void(0)" className="TopicCard-insert">
+      <a href="javascript:void(0)" 
+         className="TopicCard-insert"
+         onClick={()=>onTopicInsert("#在这里输入话题#")}>
         <span>插入话题</span>
       </a>
     </div>

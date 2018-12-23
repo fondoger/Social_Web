@@ -13,9 +13,10 @@
 }
 
 .AppHeader-logo {
-	height: 25px;
+	height: 28px;
 	width: 80px;
-	display: block;
+    display: block;
+    margin-left: -2px;
 }
 
 .AppHeader-inner {

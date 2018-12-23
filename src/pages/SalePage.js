@@ -1,68 +1,122 @@
 import React, { Component } from "react";
-import { List } from 'antd';
 import { SaleItem } from "../components";
-import { Button, Modal, Input } from "antd";
+import { List, Button, Modal, Input, InputNumber, message } from "antd";
 import "./SalePage.css";
-
-const data = [1, 2, 3, 4, 6, 5, 8];
+import { API } from '../utils';
 
 export default class SalePage extends Component {
-  state = { visiable: false, confirmLoading: false, commentsVisible: false };
+  state = { visiable: false, sales: [] };
+
+  componentDidMount() {
+    API.Sale.get({}, (responseJson)=>{
+      this.setState({sales: responseJson});
+    }, (err)=>{
+      message.error("加载失败，请刷新重试");
+    });
+  }
+
   render() {
-    const { visible, confirmLoading, } = this.state;
+    const { visible, sales} = this.state;
     return (
       <div className="main-container" style={{display: 'flex', flexDirection: 'column'}}>
         <div style={{marginBottom: 10, }}>
-          <Button icon="edit" onClick={this.showModal}>发布二手</Button>
+          <Button 
+            icon="edit" 
+            onClick={() => this.setState({ visible: true })}>
+            发布二手
+          </Button>
         </div>
-        <List
-          grid={{ gutter: 16, column: 3 }}
-          dataSource={data}
-          renderItem={item => (
-            <List.Item>
-              <SaleItem />
-            </List.Item>
-          )}
-        />
-        <Modal
-          title="发布宝贝"
+        <SalesList sales={sales} />
+        <NewSaleDialog 
           visible={visible}
-          onOk={this.handleOk}
-          confirmLoading={confirmLoading}
-          onCancel={this.handleCancel}
-          okText="发布"
-          cancelText="取消"
-        >
-          <Input placeholder="在这里输入宝贝标题" />
-          <Input.TextArea
-            placeholder="在这里输入宝贝介绍"
-            style={{resize: "none", marginTop: 20, minHeight: 200}}
-          />
-        </Modal>
+          onClose={() => this.setState({visible: false})} 
+          onNewSale={sale => this.setState({sales: [sale, ...sales]})}
+        />
       </div>
     );
   }
+}
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
+const SalesList = ({sales}) => (
+  <div style={{flexWrap: 'wrap', display: 'flex', justifyContent: 'space-between', margin: -8}}>
+    {
+      sales.map(item => <SaleItem style={{flex: 1}} key={item.id.toString()} sale={item}/>)
+    }
+  </div>
+);
+
+// const SalesList = ({sales}) => (
+//   <List
+//     grid={{ gutter: 16, column: 3 }}
+//     dataSource={sales}
+//     renderItem={item => (
+//       <List.Item key={item.id.toString()}>
+//         <SaleItem sale={item}/>
+//       </List.Item>
+//     )}
+//   />
+// );
+
+
+class NewSaleDialog extends Component {
+  state = { 
+    loading: false,
+    title: "",
+    price: "",
   };
-  handleOk = () => {
-    this.setState({
-      ModalText: 'The modal will be closed after two seconds',
-      confirmLoading: true,
-    });
-    setTimeout(() => {
-      this.setState({
-        visible: false,
-        confirmLoading: false,
-      });
-    }, 2000);
+  render() {
+    const { loading, } = this.state;
+    return(
+      <Modal
+        title="发布宝贝"
+        visible={this.props.visible}
+        onOk={this.onSubmit}
+        confirmLoading={loading}
+        onCancel={this.props.onClose}
+        okText="发布"
+        cancelText="取消"
+      >
+        <div style={{display: 'flex'}}>
+          <Input 
+            value={this.state.title}
+            placeholder="在这里输入宝贝标题" 
+            onChange={ e => this.setState({title: e.target.value}) }/>
+          <InputNumber 
+            value={this.state.price}
+            placeholder="价格"
+            style={{marginLeft: 10}}
+            onChange={ value => this.setState({price: value}) }/>
+        </div>
+        <Input.TextArea
+          placeholder="在这里输入宝贝介绍"
+          style={{resize: "none", marginTop: 20, minHeight: 200}}
+          value={this.state.text}
+          onChange={ e => this.setState({text: e.target.value})}
+        />
+      </Modal>
+    );
   }
-  handleCancel = () => {
-    this.setState({
-      visible: false,
+  onSubmit = () => {
+    this.setState({loading: true});
+    API.Sale.create({
+      title: this.state.title, 
+      text: this.state.text, 
+      price: parseFloat(this.state.price), 
+      location: 'xueyuanlu',
+      category: 'other',
+      pics: [`https://picsum.photos/500/500/?image=${getRandomInt(500)}`],
+    }, (responseJson)=>{
+      message.success("发布宝贝成功");
+      this.setState({loading: false});
+      this.props.onNewSale(responseJson);
+      this.props.onClose();
+    }, (error) => {
+      this.setState({loading: false});
+      message.error("发布宝贝失败 😰");
     });
   }
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max)) + 1;
 }

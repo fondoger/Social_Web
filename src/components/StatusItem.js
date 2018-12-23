@@ -26,25 +26,36 @@ export default class StatusItem extends React.Component {
               <UserInfo status={status} />
               <ActionDropDown
                 status={status}
-                onDelete={()=>alert("delete")}
+                onDelete={this.handleDeleteStatus}
               />
             </div>
             <StatusContent status={status} />
           </div>
         </div>
         <StatusCard status={status} />
-        { this.renderStatusFooter(status) }
+        <StatusFooter status={status} onCommentClick={this.handleCommentOnPress} />
         { showComments ?
           <StatusComments
             status={status}
             replies={replies}
             value={commentValue}
             onChange={(e)=>this.setState({commentValue: e.target.value})}
-            onSubmit={()=> this.handleReplySubmit }
+            onSubmit={ this.handleReplySubmit }
           /> : null
         }
       </div>
     );
+  }
+
+  handleDeleteStatus = (status) => {
+    API.Status.delete({'id': status.id}, (responseJson)=>{
+      message.success("删除成功");
+      if (this.props.onDelete) {
+        this.props.onDelete();
+      }
+    }, (error) => {
+      message.error("删除失败");
+    });
   }
 
   handleReplySubmit = () => {
@@ -53,7 +64,8 @@ export default class StatusItem extends React.Component {
       status_id: status.id, 
       text: commentValue,
     }, (responseJson) => {
-      this.setState({ replies: [...replies, responseJson ]});
+      this.setState({ replies: [...replies, responseJson ], value: ""});
+      message.success("回复成功");
     }, (error) => {
       message.error("回复失败 😰");
     });
@@ -74,17 +86,16 @@ export default class StatusItem extends React.Component {
     this.setState({showComments: !this.state.showComments});
   };
 
-  renderStatusFooter(status) {
-    return (
-      <div className="StatusItem-footer">
-        <FooterItem icon="#icon-shoucang" title="收藏" />
-        <FooterItem icon="#icon-zhuanfa2" title="转发" />
-        <FooterItem icon="#icon-pinglun"  title="评论" onClick={this.handleCommentOnPress} />
-        <FooterItem icon="#icon-dianzan2" title="点赞" />
-      </div>
-    );
-  }
 }
+
+const StatusFooter = ({status, onCommentClick}) => (
+  <div className="StatusItem-footer">
+    <FooterItem icon="#icon-shoucang" title="收藏" />
+    <FooterItem icon="#icon-zhuanfa2" title="转发" />
+    <FooterItem icon="#icon-pinglun"  title={status.replies==0?"评论": `${status.replies}`} onClick={onCommentClick} />
+    <FooterItem icon="#icon-dianzan2" title="点赞" />
+  </div>
+);
 
 const textToContentArray = (text) => {
   const regexp = new RegExp(`(#[\\s\\S]+?#|[\n\r]|@[\\u4e00-\\u9fa5_a-zA-Z0-9\\-]+)`, 'g');
@@ -123,13 +134,13 @@ const StatusContent = ({status}) => {
     <div className="StatusItem-content">
     { contentArray.map((content, index) => {
         if (content.text) {
-          return <EmojiSpan text={content.text} />
+          return <EmojiSpan key={index.toString()} text={content.text} />
         } else if (content.at) {
-          return <a href="#" style={{color: "#0f88eb"}}>@{content.at}</a>
+          return <a key={index.toString()} href="#" style={{color: "#0f88eb"}}>@{content.at}</a>
         } else if (content.topic) {
-          return <a href="#" style={{color: "#0f88eb"}}>#{content.topic}#</a>
+          return <a key={index.toString()} href="#" style={{color: "#0f88eb"}}>#{content.topic}#</a>
         } else if (content.newline) {
-          return <br/>
+          return <br key={index.toString()}/>
         }
     })}
     </div>
@@ -222,7 +233,7 @@ const ActionDropDown = ({status, onDelete}) => (
       overlay={(
         <Menu>
           <Menu.Item>
-            <a onClick={onDelete} >删除</a>
+            <a onClick={()=>onDelete(status)} >删除</a>
           </Menu.Item>
         </Menu>
       )}>

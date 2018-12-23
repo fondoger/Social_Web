@@ -21,9 +21,9 @@ export default class AppHeader extends Component {
             <NavLink className="AppHeader-navItem"
               activeClassName="is-active"
               to="/sale/">二手</NavLink>
-            <NavLink className="AppHeader-navItem"
+            {/* <NavLink className="AppHeader-navItem"
               activeClassName="is-active"
-              to="/news/">新闻</NavLink>
+              to="/news/">新闻</NavLink> */}
           </nav>
           <div className="AppHeader-userInfo">
             <DownloadApp />

@@ -8,9 +8,9 @@ import TopStatus from './TopStatus';
 import MyStorage from './utils/MyStorage';
 import {
   SalePage,
-  LoginPage
+  LoginPage,
+  UserPage,
 } from './pages';
-
 
 class App extends Component {
   constructor(props) {
@@ -26,7 +26,8 @@ class App extends Component {
           <div className="App-main">
             <Switch>
               <Route path="/" exact component={TopStatus} />
-              <Route path="/sale/" component={SalePage} />  
+              <Route path="/sale/" component={SalePage} /> 
+              <Route path="/user/" component={UserPage} />   
             </Switch>
           </div>
         </div>

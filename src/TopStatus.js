@@ -110,8 +110,8 @@ class StatusList extends Component {
         useWindow={true}
       >
         {
-          this.state.statuses.map(item => (
-            <StatusItem key={item.type + item.id} status={item} />
+          this.state.statuses.map((item, idx) => (
+            <StatusItem key={item.type + item.id} status={item} onDelete={()=>this.handleDeleteStatus(idx)} />
           ))
         }
         {
@@ -127,8 +127,13 @@ class StatusList extends Component {
       </InfiniteScroll>
     );
   }
+  
+  handleDeleteStatus = (index) => {
+    const statuses = this.state.statuses;
+    statuses.splice(index, 1);
+    this.setState({statuses});
+  }
 }
-
 
 const CalendarCard = () => (
   <div className="Card">

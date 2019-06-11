@@ -1,3 +1,27 @@
+社交北航的Web端[不完善]
+==========================
+
+这是整个社交北航的 Web 端，基于 React，用到了一点 Ant Design 组件。
+
+这是数据库课程课设的最终展示版本，功能相当不完善。
+
+## 项目截图
+
+
+<figure class="image">
+  <img src="./screenshots/登录页面_仿知乎.jpg" alt="">
+  <center><figcaption>登录页面_仿知乎</figcaption></center>
+</figure>
+
+<figure class="image">
+  <img src="./screenshots/首页_仿微博.jpg" alt="">
+  <center><figcaption>首页_仿微博</figcaption></center>
+</figure>
+
+<hr>
+<center>Compile & Run</center>
+<hr>
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
